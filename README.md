@@ -3,8 +3,10 @@ This repository is meant for those who want to run the Revolution PI in a Qemu e
 
 # Prerequisites
 1) Revolution PI Connect 4 or 5
+2) Windows 11 Qemu (winget install qemu-system)
+3) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
 
-2) The following packages:
+4) The following packages:
 ```bash
 sudo apt install bison flex libncurses-dev build-essentials libssl-dev
 ```
@@ -13,10 +15,13 @@ sudo apt install bison flex libncurses-dev build-essentials libssl-dev
    
 ## Steps
 
+## Compiling kernel.
+
 ### Clone Repository
 Git clone the Linux kernel for the RevPI, repo is 5G+ so it takes some time ;-)
 
 ### Make config
+This is pretty optional here, i wanted to enable some specific kernel debugging properties and Virtio drivers. Just configure how you want.
 ```bash
 # Create a blank .config file to work against.
 make revpi-v8_defconfig
@@ -24,4 +29,29 @@ make revpi-v8_defconfig
 make menuconfig
 # In menu config, configure the modules how you want. Checkout RevPi4MenuConfig for my version of this config.
 ```
+
+### Make
+Please take not of the KERNELRELEASE argument. If you do not specify this arg, you will ending up build the general kernel version (Github version).
+This might take a while...
+```bash
+sudo make KERNELRELEASE=$(uname -r) install
+```
+
+### Make install modules
+This might take a while too...
+```bash
+sudo make KERNELRELEASE=$(uname -r) modules_install
+```
+
+### Make install
+Finally run
+```bash
+sudo make KERNELRELEASE=$(uname -r) install
+```
+
+## Collect Qemu resources.
+Copy the compiled files to the shared folder.
+###
+
+
 
