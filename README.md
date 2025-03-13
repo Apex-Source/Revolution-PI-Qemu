@@ -53,5 +53,10 @@ sudo make KERNELRELEASE=$(uname -r) install
 Copy the compiled files to the shared folder.
 ###
 
+### Mount Share
+```bash
+sudo mount -t cifs //192.168.50.54/CloudShare /cloudshare -o username=cloudshare,password=PuAtRtrDNbmVtvMqmcde7Mjs
+```
+
 
 
