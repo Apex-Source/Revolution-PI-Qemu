@@ -58,7 +58,19 @@ Copy the compiled files to the shared folder.qq
 sudo mount -t cifs //192.168.50.54/CloudShare /cloudshare -o username=****,password=*****
 ```
 
-sudo qemu-system-aarch64 -M virt -m 4G -cpu cortex-a72 -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initrd.img-6.6.0-revpi7-rpi-v8  -append "root=/dev/vda rw rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
+
+```bash
+sudo qemu-system-aarch64 \
+-M virt \
+-m 4G \
+-cpu cortex-a72 \
+-kernel kernel8.img \
+-initrd initramfs8 \
+-append "root=/dev/mmcblk0p1 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" \
+-drive file=revpi.img,if=sd,media=disk,format=raw
+```
+
+
 
 
 
