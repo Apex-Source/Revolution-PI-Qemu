@@ -70,7 +70,7 @@ sudo qemu-system-aarch64 \
 -drive file=revpi.img,if=sd,media=disk,format=raw
 ```
 
-
+sudo qemu-system-aarch64 -M virt -cpu max -m 4G -hda ubuntu-24.10-live-server-arm64.iso -drive file=storage.ext4.img,format=raw -serial mon:stdio -kernel vmlinuz -append "root=/dev/vda2" -initrd initrd
 
 
 
