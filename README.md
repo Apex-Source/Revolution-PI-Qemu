@@ -2,7 +2,7 @@
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
 
 # Prerequisites
-1) Revolution PI Connect 4 or 5
+1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
 2) Windows 11 Qemu (winget install qemu-system)
 3) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
 
@@ -29,7 +29,11 @@ make revpi-v8_defconfig
 make menuconfig
 # In menu config, configure the modules how you want. Checkout RevPi4MenuConfig for my version of this config.
 ```
-
+[!important]
+Ensure that the kernel is configured with the virtio_blk module enabled:
+```bash
+CONFIG_VIRTIO_BLK=y
+```
 ### Make
 Please take not of the KERNELRELEASE argument. If you do not specify this arg, you will ending up build the general kernel version (Github version).
 This might take a while...
@@ -58,6 +62,27 @@ Copy the compiled files to the shared folder.qq
 sudo mount -t cifs //192.168.50.54/CloudShare /cloudshare -o username=****,password=*****
 ```
 
+### Finally got it working
+
+
+What was the problem? The initrd didnt contain the virtio_blk module. This is required to simulate the eMMC/SD Card.
+
+### Install Initialize RAM File System Tools
+```bash
+sudo apt install initramfs-tools
+```
+
+sudo apt install initramfs-tools
+# Create backup..
+sudo cp /etc/initramfs-tools/modules /etc/initramfs-tools/modules.backup
+
+# Add module 'virtio_blk' to /initramfs module.
+
+
+
+```bash
+sudo qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
+```
 
 ```bash
 sudo qemu-system-aarch64 \
