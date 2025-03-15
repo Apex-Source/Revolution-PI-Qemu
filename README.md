@@ -62,10 +62,6 @@ Copy the compiled files to the shared folder.qq
 sudo mount -t cifs //192.168.XX.XX/CloudShare /cloudshare -o username=****,password=*****
 ```
 
-### Finally got it working
-
-What was the problem? The initrd didnt contain the virtio_blk module. This is required to simulate the eMMC/SD Card.
-
 ### Install Initialize RAM File System Tools
 
 ```bash
@@ -81,7 +77,28 @@ cp /etc/initramfs-tools/modules /etc/initramfs-tools/modules.backup
 ```bash
 vim /etc/initramfs-tools/modules
 ```
+### Create Image
+```
+qemu-img create -f raw rpi-boot.img 32G
+```
 
+### Connect NBD drive
+```
+qemu-nbd -c /dev/ndb0 rpi-boot.img
+```
+
+### Format Drive with RPI Imager
+```
+# I did use the UI here.
+rpi-imager /dev/nbd0 250234-bookworm-revpi-image.img cm4
+```
+
+### Disconnect NBD
+```
+qemu-nbd -d /dev/nbd0
+```
+
+### Start QEMU
 ```bash
 qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
 ```
