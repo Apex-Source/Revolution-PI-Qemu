@@ -1,17 +1,17 @@
 # Revolution-PI-Qemu
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
 
-# Prerequisites
+## Prerequisites
 1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
 2) Windows 11 Qemu (winget install qemu-system)
 3) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
-
 4) The following packages:
+
 ```bash
 sudo apt install bison flex libncurses-dev build-essentials libssl-dev
 ```
 
-3) Optional: I have created a samba share to create a shared folder between my host machine and the RevPi.
+5) Optional: I have created a samba share to create a shared folder between my host machine and the RevPi.
    
 ## Steps
 
@@ -59,43 +59,38 @@ Copy the compiled files to the shared folder.qq
 
 ### Mount Share
 ```bash
-sudo mount -t cifs //192.168.50.54/CloudShare /cloudshare -o username=****,password=*****
+sudo mount -t cifs //192.168.XX.XX/CloudShare /cloudshare -o username=****,password=*****
 ```
 
 ### Finally got it working
 
-
 What was the problem? The initrd didnt contain the virtio_blk module. This is required to simulate the eMMC/SD Card.
 
 ### Install Initialize RAM File System Tools
+
 ```bash
 sudo apt install initramfs-tools
 ```
 
-sudo apt install initramfs-tools
-# Create backup..
-sudo cp /etc/initramfs-tools/modules /etc/initramfs-tools/modules.backup
-
-# Add module 'virtio_blk' to /initramfs module.
-
-
-
+### Create backup
 ```bash
-sudo qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
+cp /etc/initramfs-tools/modules /etc/initramfs-tools/modules.backup
+```
+
+### Add module 'virtio_blk' to /initramfs module.
+```bash
+vim /etc/initramfs-tools/modules
 ```
 
 ```bash
-sudo qemu-system-aarch64 \
--M virt \
--m 4G \
--cpu cortex-a72 \
--kernel kernel8.img \
--initrd initramfs8 \
--append "root=/dev/mmcblk0p1 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" \
--drive file=revpi.img,if=sd,media=disk,format=raw
+qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
 ```
 
+### Ubuntu comparison test
+I had a lot of trouble mounting the root filesystem. I compiled the kernel with VIRTIO enabled, but it didn’t work. I had to modify the initrd module configuration to get it working. I compared the Ubuntu boot output with the output from the RevPi image and immediately noticed that the VIRTIO kernel module was missing at boot time on the RevPi.
+```bash
 sudo qemu-system-aarch64 -M virt -cpu max -m 4G -hda ubuntu-24.10-live-server-arm64.iso -drive file=storage.ext4.img,format=raw -serial mon:stdio -kernel vmlinuz -append "root=/dev/vda2" -initrd initrd
+```
 
 
 
