@@ -129,14 +129,13 @@ sudo update-initramfs -c -k $(uname -r)
 ```bash
 mkdir $HOME/revpi-qemu
 cd $HOME/revpi-qemu
-scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu .
-scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu .
-scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz .
+scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu
+scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu
+scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz $HOME/revpi-qemu
 ```
 
 ### Create eMMC file system on WSL
 ```
-cd $HOME/revpi-qemu
 qemu-img create -f raw $HOME/revpi-qemu/revolution-pi-filesystem.img 32G
 ```
 
