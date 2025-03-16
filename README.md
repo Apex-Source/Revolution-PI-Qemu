@@ -1,5 +1,13 @@
 # Revolution-PI-Qemu
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
+# My setup
+
+Windows 11
+WSL version: 2.4.12.0
+WSL Kernel: 6.6.75.1-microsoft-standard-WSL2+
+Ubuntu 24.04.2 LTS
+QEMU version 9.2.2
+
 
 ## Prerequisites
 1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
@@ -18,7 +26,12 @@ sudo apt install bison flex libncurses-dev build-essentials libssl-dev
 ## Compiling kernel.
 
 ### Clone Repository
-Git clone the Linux kernel for the RevPI, repo is 5G+ so it takes some time ;-)
+This aint probably required, but i just did. You might chose your own way to compile the kernel.
+```
+ssh user@revpi
+cd /usr/src/linux
+git clone https://github.com/RevolutionPi/linux.git
+```
 
 ### Make config
 This is pretty optional here, i wanted to enable some specific kernel debugging properties and Virtio drivers. Just configure how you want.
