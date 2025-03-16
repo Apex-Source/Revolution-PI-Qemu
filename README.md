@@ -123,21 +123,22 @@ sudo update-initramfs -c -k $(uname -r)
 ```bash
 mkdir $HOME/revpi-qemu
 cd $HOME/revpi-qemu
-scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu
-scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu
+scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu .
+scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu .
+scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz .
 ```
 
 ### Create eMMC file system on WSL
 ```
 cd $HOME/revpi-qemu
-qemu-img create -f raw revolution-pi-filesystem.img 32G
+qemu-img create -f raw $HOME/revpi-qemu/revolution-pi-filesystem.img 32G
 ```
 
 ### Connect NBD drive
 This is required to use tools like fdisk or gparted, make sure nbd module is enabled!
 ```
 sudo modprobe nbd
-sudo qemu-nbd -f raw -c /dev/nbd0 revolution-pi-filesystem.img
+sudo qemu-nbd -f raw -c /dev/nbd0 $HOME/revpi-qemu/revolution-pi-filesystem.img
 ```
 
 ### Format Drive with RPI Imager
@@ -162,6 +163,7 @@ sudo qemu-nbd -d /dev/nbd0
 
 ### Start QEMU
 ```bash
+cd $HOME/revpi-qemu
 sudo qemu-system-aarch64 -M virt \
 -m 4G \
 -cpu max \
