@@ -177,6 +177,12 @@ When everything works, you should see something like:
 <img width="341" alt="image" src="https://github.com/user-attachments/assets/048904ff-4280-46c3-8eac-e03255b492ea" />
 
 
+### Upcoming
+1) Configure networking
+2) Kernel module debugging with GDB
+3) Integration testing
+4) Load testing
+
 
 
 
