@@ -1,0 +1,34 @@
+# file: /etc/initramfs-tools/modules
+# description: This file is on your RevPi, should be updated with the specified modules below.
+# WARNING: I have just enabled all Virtio stuff, you might cherry pick the ones you like. 
+# I just got it working whit al of those modules enabled.
+
+sd_mod
+virtio_blk
+virtio_mmio
+virtio_gnu
+virtio_ring
+virtio_rng
+virtio_scsi
+virtio_pci
+virtio_gpio
+virtio_config
+virtio_console
+virtio_bt
+virtio_ids
+virtio_pmem
+virtio_fs
+virtio_vsock
+virtio_snd
+virtio_gpu
+virtio_iommu
+virtio_i2c
+virtio_9p
+virtio_net.h
+virtio_input
+virtio_scmi
+virtio_types
+virtio_crypto
+virtio_mem
+virtio_pcidev
+virtio_balloon
