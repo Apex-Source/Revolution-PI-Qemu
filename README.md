@@ -1,8 +1,13 @@
 # Revolution-PI-Qemu
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
 
-## My use case.
-For software that i'm developing, it is crucial that everything works, since it is controlling civil
+[!warning] Warning: Following this guide could potentially brick your device. I take no responsibility for any damage. Proceed with caution!
+
+## Use case
+I wanted to debug some kernel modules I’ve written for the RevPI and run integration tests on virtual RevPI devices to analyze Modbus bandwidth limitations and other behaviors. The goal is to enhance the quality of my software. Since the RevPI is the core of my system, I feel the need to understand every detail inside and out. This setup allows me to experiment with the RevPI kernel without risking damage to the physical device.
+
+It’s possible that I’ve reinvented the wheel with this guide, as there are already resources on running a Raspberry Pi in a QEMU environment. However, the RevPI has its own kernel modules and unique components, making it a different challenge.
+
 # My setup
 ```
 Windows 11
@@ -176,12 +181,17 @@ When everything works, you should see something like:
 
 <img width="341" alt="image" src="https://github.com/user-attachments/assets/048904ff-4280-46c3-8eac-e03255b492ea" />
 
-
 ### Upcoming
 1) Configure networking
 2) Kernel module debugging with GDB
 3) Integration testing
 4) Load testing
+
+### Pain In the *ss
+
+- Specify the -accel tcg flag. Which ensures that every piece of the CPU is emulated. Otherwise you may expect some ARM EL3 errors, since my host system is an x86 CPU it is unable to simulate ARM EL3 functionality. tcg flag ensures that this functionality is simulated.
+- Make sure 'virtio_blk' module is enabled at boot (initrd).
+- Add the SMP4 flag to avoid cpu max randomness. -smp4 just defines 4 CPU cores. Please checkout QEMU docs for more info.
 
 
 
