@@ -44,6 +44,7 @@ git clone https://github.com/RevolutionPi/linux.git
 
 ### Make config
 This is pretty optional here, i wanted to enable some specific kernel debugging properties and Virtio drivers. Just configure how you want.
+You can use mine as well, please checkout file: (RevPi4MenuConfig)[https://github.com/Apex-Source/Revolution-PI-Qemu/blob/main/RevPi4MenuConfig]
 ```bash
 # Create a blank .config file to work against.
 make revpi-v8_defconfig
