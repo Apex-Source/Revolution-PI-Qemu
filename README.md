@@ -4,7 +4,7 @@ This repository is meant for those who want to run the Revolution PI in a Qemu e
 > [!warning]
 > Warning: Following this guide could potentially brick your device. I take no responsibility for any damage. Proceed with caution!
 
-## Use case
+### Use case
 I wanted to debug some kernel modules I’ve written for the RevPI and run integration tests on virtual RevPI devices to analyze Modbus bandwidth limitations and other behaviors. The goal is to enhance the quality of my software. Since the RevPI is the core of my system, I feel the need to understand every detail inside and out. This setup allows me to experiment with the RevPI kernel without risking damage to the physical device.
 
 It’s possible that I’ve reinvented the wheel with this guide, as there are already resources on running a Raspberry Pi in a QEMU environment. However, the RevPI has its own kernel modules and unique components, making it a different challenge.
@@ -18,7 +18,7 @@ Ubuntu 24.04.2 LTS
 QEMU version 9.2.2
 ```
 
-## Prerequisites
+### Prerequisites
 1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
 2) Boot image: [250234-bookworm-revpi-image.img](https://revolutionpi.com/fileadmin/downloads/images/250124-revpi-bookworm-arm64-lite.zip)
 3) Windows 11 Qemu (winget install qemu-system)
@@ -33,10 +33,8 @@ sudo apt install bison flex libncurses-dev build-essentials libssl-dev
    
 ## Steps
 
-## Compiling kernel.
-
 ### Clone Repository
-This aint probably required, but i just did. You might chose your own way to compile the kernel.
+Clone this on your RevPI, and make sure you have at leat 10 / 15G available (5G+ src / 5G+ for compiled kernel).
 ```
 ssh user@revpi
 cd /usr/src/linux
@@ -193,6 +191,10 @@ When everything works, you should see something like:
 - Specify the -accel tcg flag. Which ensures that every piece of the CPU is emulated. Otherwise you may expect some ARM EL3 errors, since my host system is an x86 CPU it is unable to simulate ARM EL3 functionality. tcg flag ensures that this functionality is simulated.
 - Make sure 'virtio_blk' module is enabled at boot (initrd).
 - Add the SMP4 flag to avoid cpu max randomness. -smp4 just defines 4 CPU cores. Please checkout QEMU docs for more info.
+
+### My Device is bricked?
+Oh boy, please try if this guide can help:
+https://revolutionpi.com/documentation/revpi-images/#saving-the-image
 
 
 
