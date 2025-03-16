@@ -181,12 +181,6 @@ When everything works, you should see something like:
 
 <img width="341" alt="image" src="https://github.com/user-attachments/assets/048904ff-4280-46c3-8eac-e03255b492ea" />
 
-### Upcoming
-1) Configure networking
-2) Kernel module debugging with GDB
-3) Integration testing
-4) Load testing
-
 ### Pain In the *ss
 
 - Specify the -accel tcg flag, which ensures that the entire CPU is emulated. Without this flag, you may encounter ARM EL3 errors, as my host system uses an x86 CPU, which cannot simulate ARM EL3 functionality. The tcg flag ensures this functionality is emulated correctly
@@ -197,6 +191,10 @@ When everything works, you should see something like:
 Oh boy, please try if this guide can help:
 https://revolutionpi.com/documentation/revpi-images/#saving-the-image
 
-
+### Upcoming
+1) Configure networking
+2) Kernel module debugging with GDB
+3) Integration testing
+4) Load testing
 
 
