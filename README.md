@@ -125,20 +125,27 @@ scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu
 ### Create eMMC file system on WSL
 ```
 cd $HOME/revpi-qemu
-qemu-img create -f raw rpi-boot.img 32G
+qemu-img create -f raw revolution-pi-filesystem.img 32G
 ```
 
 ### Connect NBD drive
-This is required to use tools like fdisk or gparted.
+This is required to use tools like fdisk or gparted, make sure nbd module is enabled!
 ```
-qemu-nbd -c /dev/ndb0 rpi-boot.img
+sudo modprobe nbd
+sudo qemu-nbd -f raw -c /dev/nbd0 revolution-pi-filesystem.img
 ```
 
 ### Format Drive with RPI Imager
 ```
-# I did use the UI here.
-sudo rpi-imager /dev/nbd0 250234-bookworm-revpi-image.img cm4
+sudo rpi-imager
 ```
+1) Choose Raspberry PI Device - RevPI is based on Compute Module 4.
+2) Choose OS, select downloaded bookworm revpi image (in my case 250234-bookworm-revpi-image.img)
+3) Choose your NBD storage device. The version
+4) Click next, and you will be asked to specify some default system settings, like networking, username and password, and more. Please modify accordingly.
+5) Save the settings and procceed.
+6) 
+
 
 ### Disconnect NBD
 ```
