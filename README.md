@@ -1,4 +1,4 @@
-# Revolution-PI-Qemu
+# Virtual Revolution PI with QEMU
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
 
 > [!warning]
@@ -16,6 +16,7 @@ WSL version: 2.4.12.0
 WSL Kernel: 6.6.75.1-microsoft-standard-WSL2+
 Ubuntu 24.04.2 LTS
 QEMU version 9.2.2
+Revolution PI Connect 4
 ```
 
 ### Prerequisites
