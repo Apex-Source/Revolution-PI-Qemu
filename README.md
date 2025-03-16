@@ -1,7 +1,8 @@
 # Revolution-PI-Qemu
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
 
-[!warning] Warning: Following this guide could potentially brick your device. I take no responsibility for any damage. Proceed with caution!
+> [!warning]
+> Warning: Following this guide could potentially brick your device. I take no responsibility for any damage. Proceed with caution!
 
 ## Use case
 I wanted to debug some kernel modules I’ve written for the RevPI and run integration tests on virtual RevPI devices to analyze Modbus bandwidth limitations and other behaviors. The goal is to enhance the quality of my software. Since the RevPI is the core of my system, I feel the need to understand every detail inside and out. This setup allows me to experiment with the RevPI kernel without risking damage to the physical device.
