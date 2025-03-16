@@ -181,7 +181,12 @@ sudo qemu-system-aarch64 -M virt \
 -device virtio-blk-device,drive=hd0 \
 -serial mon:stdio
 ```
-Command
+
+### Default Credentials
+When no credentials are specified in RPI imager, you should login with user 'pi' and password 'raspberry'. No matter what your sticker on the RevPI said.
+
+### Serial Number & MAC address
+On first boot, you need to specify a serial number and MAC adres. TODO: Need to check if this connects to any RevPI server for validation?
 
 ### Done
 When everything works, you should see something like: 
