@@ -106,7 +106,7 @@ qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boo
 ### Ubuntu comparison test
 I had a lot of trouble mounting the root filesystem. I compiled the kernel with VIRTIO enabled, but it didn’t work. I had to modify the initrd module configuration to get it working. I compared the Ubuntu boot output with the output from the RevPi image and immediately noticed that the VIRTIO kernel module was missing at boot time on the RevPi.
 ```bash
-sudo qemu-system-aarch64 -M virt -cpu max -m 4G -hda ubuntu-24.10-live-server-arm64.iso -drive file=storage.ext4.img,format=raw -serial mon:stdio -kernel vmlinuz -append "root=/dev/vda2" -initrd initrd
+qemu-system-aarch64 -M virt -m 4G -cpu max -smp 4 -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0 -accel tcg
 ```
 
 
