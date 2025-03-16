@@ -1,5 +1,8 @@
 # Revolution-PI-Qemu
 This repository is meant for those who want to run the Revolution PI in a Qemu environment. For whatever reason they want to.
+
+## My use case.
+For software that i'm developing, it is crucial that everything works, since it is controlling civil
 # My setup
 ```
 Windows 11
@@ -11,9 +14,10 @@ QEMU version 9.2.2
 
 ## Prerequisites
 1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
-2) Windows 11 Qemu (winget install qemu-system)
-3) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
-4) The following packages:
+2) Boot image: [250234-bookworm-revpi-image.img](https://revolutionpi.com/fileadmin/downloads/images/250124-revpi-bookworm-arm64-lite.zip)
+3) Windows 11 Qemu (winget install qemu-system)
+4) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
+5) The following packages:
 
 ```bash
 sudo apt install bison flex libncurses-dev build-essentials libssl-dev
@@ -61,22 +65,34 @@ sudo make KERNELRELEASE=$(uname -r) modules_install
 ```
 
 ### Make install
-Finally run
 ```bash
 sudo make KERNELRELEASE=$(uname -r) install
 ```
 
-## Collect Qemu resources.
-Copy the compiled files to the shared folder.qq
-###
-
-### Mount Share
+### Make Image.gz
+Finally run
 ```bash
-sudo mount -t cifs //192.168.XX.XX/CloudShare /cloudshare -o username=****,password=*****
+sudo make KERNELRELEASE=$(uname -r) Image.gz
+```
+
+### Test your kernel
+Reboot the RevPI and check with dmesg if everything still works. If everything works, you should be able to run
+```bash
+sudo modinfo virtio_blk
+```
+It should return something like:
+```
+name:           virtio_blk
+filename:       (builtin)
+license:        GPL
+file:           drivers/block/virtio_blk
+description:    Virtio block driver
+parm:           num_request_queues:Limit the number of request queues to use for blk device. 0 for no limit. Values > nr_cpu_ids truncated to nr_cpu_ids. (uint)
+parm:           poll_queues:The number of dedicated virtqueues for polling I/O (uint)
+parm:           queue_depth:uint
 ```
 
 ### Install Initialize RAM File System Tools
-
 ```bash
 sudo apt install initramfs-tools
 ```
@@ -89,13 +105,31 @@ cp /etc/initramfs-tools/modules /etc/initramfs-tools/modules.backup
 ### Add module 'virtio_blk' to /initramfs module.
 ```bash
 vim /etc/initramfs-tools/modules
+# or just
+echo "virtio_blk" >> /etc/initramfs-tools/modules
 ```
-### Create Image
+
+### Update RAM File system
 ```
+sudo update-initramfs -c -k $(uname -r)
+```
+
+### Copy resources to local WSL
+```bash
+mkdir $HOME/revpi-qemu
+cd $HOME/revpi-qemu
+scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu
+scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu
+```
+
+### Create eMMC file system on WSL
+```
+cd $HOME/revpi-qemu
 qemu-img create -f raw rpi-boot.img 32G
 ```
 
 ### Connect NBD drive
+This is required to use tools like fdisk or gparted.
 ```
 qemu-nbd -c /dev/ndb0 rpi-boot.img
 ```
@@ -103,23 +137,17 @@ qemu-nbd -c /dev/ndb0 rpi-boot.img
 ### Format Drive with RPI Imager
 ```
 # I did use the UI here.
-rpi-imager /dev/nbd0 250234-bookworm-revpi-image.img cm4
+sudo rpi-imager /dev/nbd0 250234-bookworm-revpi-image.img cm4
 ```
 
 ### Disconnect NBD
 ```
-qemu-nbd -d /dev/nbd0
+sudo qemu-nbd -d /dev/nbd0
 ```
 
 ### Start QEMU
 ```bash
-qemu-system-aarch64 -M virt -m 4G -cpu max -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -serial mon:stdio -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0
-```
-
-### Ubuntu comparison test
-I had a lot of trouble mounting the root filesystem. I compiled the kernel with VIRTIO enabled, but it didn’t work. I had to modify the initrd module configuration to get it working. I compared the Ubuntu boot output with the output from the RevPi image and immediately noticed that the VIRTIO kernel module was missing at boot time on the RevPi.
-```bash
-qemu-system-aarch64 -M virt -m 4G -cpu max -smp 4 -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0 -accel tcg
+sudo qemu-system-aarch64 -M virt -m 4G -cpu max -smp 4 -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0 -accel tcg
 ```
 
 
