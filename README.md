@@ -193,7 +193,7 @@ When everything works, you should see something like:
 - Make sure 'virtio_blk' module is enabled at boot (initrd).
 - Add the SMP4 flag to avoid cpu max randomness. -smp4 just defines 4 CPU cores. Please checkout QEMU docs for more info.
 
-### My Device is bricked?
+### Bricked your device?
 Oh boy, please try if this guide can help:
 https://revolutionpi.com/documentation/revpi-images/#saving-the-image
 
