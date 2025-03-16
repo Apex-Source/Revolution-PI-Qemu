@@ -52,6 +52,11 @@ make revpi-v8_defconfig
 make menuconfig
 # In menu config, configure the modules how you want. Checkout RevPi4MenuConfig for my version of this config.
 ```
+Please checkout the following instruction, since there is make target for virtual config as well:
+```bash
+sudo make virt.config
+```
+
 > [!important]
 > Ensure that the kernel is configured with the virtio_blk module enabled:
 ```bash
