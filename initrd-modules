@@ -24,7 +24,7 @@ virtio_gpu
 virtio_iommu
 virtio_i2c
 virtio_9p
-virtio_net.h
+virtio_net
 virtio_input
 virtio_scmi
 virtio_types
