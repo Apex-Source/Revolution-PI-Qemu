@@ -174,8 +174,8 @@ Command
 ### Done
 When everything works, you should see something like: 
 
+<img width="341" alt="image" src="https://github.com/user-attachments/assets/048904ff-4280-46c3-8eac-e03255b492ea" />
 
-<img width="413" alt="image" src="https://github.com/user-attachments/assets/6a2dfeee-6a13-4280-8e3e-b09f5e170ab7" />
 
 
 
