@@ -146,6 +146,9 @@ sudo rpi-imager
 5) Save the settings and procceed.
 6) Close RPI Imager
 
+### Create SWAP partition.
+I have noticed that it complained about missing a swap partition, i created one with gparted.
+You may also use fdsik or anything else.
 
 ### Disconnect NBD
 ```
@@ -154,8 +157,24 @@ sudo qemu-nbd -d /dev/nbd0
 
 ### Start QEMU
 ```bash
-sudo qemu-system-aarch64 -M virt -m 4G -cpu max -smp 4 -kernel Image.gz  -drive file=rpi-boot.img,format=raw,if=none,id=hd0 -initrd initramfs8  -append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0 -accel tcg
+sudo qemu-system-aarch64 -M virt \
+-m 4G \
+-cpu max \
+-smp 4 \
+-kernel Image.gz  \
+-accel tcg \
+-initrd initramfs8  \
+-append "root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" \
+-drive file=revolution-pi-filesystem.img,format=raw,if=none,id=hd0 \
+-device virtio-blk-device,drive=hd0 \
+-serial mon:stdio
 ```
+Command
+
+### Done
+When everything works, you should see something like:
+<img width="413" alt="image" src="https://github.com/user-attachments/assets/6a2dfeee-6a13-4280-8e3e-b09f5e170ab7" />
+
 
 
 
