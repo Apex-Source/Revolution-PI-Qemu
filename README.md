@@ -144,7 +144,7 @@ sudo rpi-imager
 3) Choose your NBD storage device. The version
 4) Click next, and you will be asked to specify some default system settings, like networking, username and password, and more. Please modify accordingly.
 5) Save the settings and procceed.
-6) 
+6) Close RPI Imager
 
 
 ### Disconnect NBD
