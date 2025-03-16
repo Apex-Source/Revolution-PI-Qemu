@@ -189,9 +189,9 @@ When everything works, you should see something like:
 
 ### Pain In the *ss
 
-- Specify the -accel tcg flag. Which ensures that every piece of the CPU is emulated. Otherwise you may expect some ARM EL3 errors, since my host system is an x86 CPU it is unable to simulate ARM EL3 functionality. tcg flag ensures that this functionality is simulated.
-- Make sure 'virtio_blk' module is enabled at boot (initrd).
-- Add the SMP4 flag to avoid cpu max randomness. -smp4 just defines 4 CPU cores. Please checkout QEMU docs for more info.
+- Specify the -accel tcg flag, which ensures that the entire CPU is emulated. Without this flag, you may encounter ARM EL3 errors, as my host system uses an x86 CPU, which cannot simulate ARM EL3 functionality. The tcg flag ensures this functionality is emulated correctly
+- Ensure that the 'virtio_blk' module is enabled during boot (via initrd).
+- Add the -smp 4 flag to prevent CPU core inconsistencies. This flag simply allocates 4 CPU cores. For more details, refer to the QEMU documentation
 
 ### Bricked your device?
 Oh boy, please try if this guide can help:
