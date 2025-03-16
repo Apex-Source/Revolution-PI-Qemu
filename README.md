@@ -22,7 +22,7 @@ Revolution PI Connect 4
 ### Prerequisites
 1) Revolution PI Connect 4 or 5 / Raspberry PI 4 Compute Module
 2) Boot image: [250234-bookworm-revpi-image.img](https://revolutionpi.com/fileadmin/downloads/images/250124-revpi-bookworm-arm64-lite.zip)
-3) Windows 11 Qemu (winget install qemu-system)
+3) Windows 11 with WSL and QEMU installed.
 4) A Shared folder between your host(Windows 11 machine in my case) and the RevPI.
 5) The following packages installed on your RevPI:
 
