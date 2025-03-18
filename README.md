@@ -140,7 +140,7 @@ cd $HOME/revpi-qemu
 scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-guide
 scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-guide
 scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz $HOME/revpi-guide
-scp user@revpi:/home/user/6.6.0-revpi7-rpi-v8.tar.gz
+scp user@revpi:/home/user/6.6.0-revpi7-rpi-v8.tar.gz $HOME/revpi-guide
 ```
 
 ### Create eMMC file system on WSL
@@ -174,7 +174,7 @@ You may also use fdsik or anything else.
 ```
 mkdir $HOME/revpi-guide/mnt
 sudo mount /dev/nbd0p2 $HOME/revpi-guide/mnt
-tar -xzvf $HOME/6.6.0-revpi7-rpi-v8.tar.gz -C /home/user/revpi-guide/mnt/lib/modules
+tar -xzvf $HOME/revpi-guide/6.6.0-revpi7-rpi-v8.tar.gz -C /home/user/revpi-guide/mnt/lib/modules
 sudo umount /dev/nbd0p2
 ```
 
