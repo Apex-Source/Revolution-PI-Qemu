@@ -174,7 +174,7 @@ You may also use fdsik or anything else.
 ```
 mkdir $HOME/revpi-guide/mnt
 sudo mount /dev/nbd0p2 $HOME/revpi-guide/mnt
-tar -xzvf $HOME/revpi-guide/6.6.0-revpi7-rpi-v8.tar.gz -C /home/user/revpi-guide/mnt/lib/modules
+tar -xzvf $HOME/revpi-guide/6.6.0-revpi7-rpi-v8.tar.gz -C $HOME/revpi-guide/mnt/lib/modules
 sudo umount /dev/nbd0p2
 ```
 
