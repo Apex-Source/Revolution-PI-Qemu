@@ -203,7 +203,7 @@ qemu-system-aarch64 -M virt \
 When no credentials are specified in RPI imager, you should login with user 'pi' and password 'raspberry'. No matter what your sticker on the RevPI said.
 
 ### Serial Number & MAC address
-On first boot, you need to specify a serial number and MAC adres. TODO: Need to check if this connects to any RevPI server for validation. For now, i just assume they have at least implemented something.
+On first boot, you need to specify a serial number and MAC adres. 
 In my case i just used the ones i got from my RevPI which ofcourse, i dont share...
 
 ### Done
