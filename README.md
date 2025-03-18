@@ -161,6 +161,19 @@ sudo rpi-imager
 I have noticed that it complained about missing a swap partition, i created one with gparted.
 You may also use fdsik or anything else.
 
+### Download compiled kernel from RevPI to WSL
+```
+mkdir $HOME/revpi-guide/6.6.0-revpi7-rpi-v8
+cd $HOME/revpi-guide
+scp user@revpi:/lib/module/6.6.0-revpi7-rpi-v8/* 6.6.0-revpi7-rpi-v8
+```
+
+### Copy new compiled kernel to RPI image.
+```
+mkdir $HOME/revpi-guide/mnt
+sudo mount /dev/nbd0p2 $HOME/revpi-guide/mnt
+sudo cp -r /path/to/compiled/kernel
+```
 ### Disconnect NBD
 ```
 sudo qemu-nbd -d /dev/nbd0
