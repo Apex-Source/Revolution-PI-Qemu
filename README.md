@@ -125,25 +125,34 @@ echo "virtio_blk" >> /etc/initramfs-tools/modules
 sudo update-initramfs -c -k $(uname -r)
 ```
 
+### Compress new kernel sources and modules
+This is required to enable the included virtio drivers which were not enabled by default (and therefore recompiling of the kernel is required).
+You have to move the new kernel to the file system later in this guide.
+```
+cd $HOME
+tar -czvf $(uname -r).tar.gz -C /lib/modules $(uname -r)
+```
+
 ### Copy resources to local WSL
 ```bash
-mkdir $HOME/revpi-qemu
+mkdir $HOME/revpi-guide
 cd $HOME/revpi-qemu
-scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-qemu
-scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-qemu
-scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz $HOME/revpi-qemu
+scp user@revpi:/boot/firmware/kernel8.img $HOME/revpi-guide
+scp user@revpi:/boot/firmware/initramfs8 $HOME/revpi-guide
+scp user@revpi:/usr/src/linux/arch/arm64/boot/Image.gz $HOME/revpi-guide
+scp user@revpi:/home/user/6.6.0-revpi7-rpi-v8.tar.gz
 ```
 
 ### Create eMMC file system on WSL
 ```
-qemu-img create -f raw $HOME/revpi-qemu/revolution-pi-filesystem.img 32G
+qemu-img create -f raw $HOME/revpi-guide/revolution-pi-filesystem.img 32G
 ```
 
 ### Connect NBD drive
 This is required to use tools like fdisk or gparted, make sure nbd module is enabled!
 ```
 sudo modprobe nbd
-sudo qemu-nbd -f raw -c /dev/nbd0 $HOME/revpi-qemu/revolution-pi-filesystem.img
+sudo qemu-nbd -f raw -c /dev/nbd0 $HOME/revpi-guide/revolution-pi-filesystem.img
 ```
 
 ### Format Drive with RPI Imager
@@ -161,19 +170,14 @@ sudo rpi-imager
 I have noticed that it complained about missing a swap partition, i created one with gparted.
 You may also use fdsik or anything else.
 
-### Download compiled kernel from RevPI to WSL
-```
-mkdir $HOME/revpi-guide/6.6.0-revpi7-rpi-v8
-cd $HOME/revpi-guide
-scp user@revpi:/lib/module/6.6.0-revpi7-rpi-v8/* 6.6.0-revpi7-rpi-v8
-```
-
 ### Copy new compiled kernel to RPI image.
 ```
 mkdir $HOME/revpi-guide/mnt
 sudo mount /dev/nbd0p2 $HOME/revpi-guide/mnt
-sudo cp -r /path/to/compiled/kernel
+tar -xzvf $HOME/6.6.0-revpi7-rpi-v8.tar.gz -C /home/user/revpi-guide/mnt/lib/modules
+sudo umount /dev/nbd0p2
 ```
+
 ### Disconnect NBD
 ```
 sudo qemu-nbd -d /dev/nbd0
@@ -181,8 +185,8 @@ sudo qemu-nbd -d /dev/nbd0
 
 ### Start QEMU
 ```bash
-cd $HOME/revpi-qemu
-sudo qemu-system-aarch64 -M virt \
+cd $HOME/revpi-guide
+qemu-system-aarch64 -M virt \
 -m 4G \
 -cpu max \
 -smp 4 \
