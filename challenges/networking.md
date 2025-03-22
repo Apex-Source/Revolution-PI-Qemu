@@ -1,6 +1,6 @@
 # Networking
 
-> [!danger]
+> [!error]
 > Danger: Im a bit of a kernel n00b. So please do not follow this guide. If you do, you might see a lot of brainfarts which doesnt make sense to any senior (C/C++/Kernel) developer. Writing things down and sharing with the public is just a way how like learn stuff.
 
 For now i have discovered that the piControl kernel module is missing a backend device. QEMU supports character devices.
