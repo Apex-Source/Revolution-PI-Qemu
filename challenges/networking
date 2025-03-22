@@ -1,0 +1,70 @@
+# Networking
+
+> [!danger]
+> Danger: Im a bit of a kernel n00b. So please do not follow this guide. If you do, you might see a lot of brainfarts which doesnt make sense to any senior (C/C++/Kernel) developer. Writing things down and sharing with the public is just a way how like learn stuff.
+
+For now i have discovered that the piControl kernel module is missing a backend device. QEMU supports character devices.
+
+## Scenario
+Started QEMU instance with instructions from the guide. It should at least have a working internet connection. All other fancy stuf is out of scope here.
+
+## Bridge Setup
+This may change, since i have never get it working.
+```
+sudo ip link add name br0 type bridge
+sudo ip link set br0 up
+## qemu should create a nic.
+## link that nic to the bridge.
+sudo ip link set tapX master br0
+```
+
+## The QEMU instruction
+```
+sudo qemu-system-aarch64 -M virt -m 2048M -cpu max -smp 4 -kernel Image.gz  -drive file=revolution-pi-filesystem.img,format=raw,if=none,id=hd0 -initrd initramfs8  -append "kgdboc=ttyAMA0,115200 kgdbwait root=/dev/vda2 rootfstype=ext4 fsck.repair=yes rootwait console=ttyAMA0" -device virtio-blk-device,drive=hd0 -accel tcg -d guest_errors -D log3.txt -nic bridge,id=custom,br=br0 -serial mon:stdio
+```
+
+## Expected result
+I would have expected that there was a network device available in the QEMU instance, but there is none...
+when running 'ip a' i only see a loopback device (lo).
+
+## Logs & Errors
+PiControl does recognize the config.rsc file and device /dev/piControl0 is created.
+```
+[   29.051223] piControl: loading out-of-tree module taints kernel.
+[   29.102901] piControl: RevPi Core
+[   29.102973] piControl: MAJOR-No.  : 240
+[   29.104840] piControl: MAJOR-No.  : 240  MINOR-No.  : 0
+[   29.136767] piControl: read file finished, f_pos=1358
+[   29.141784] piControl: 1 devices found
+[   29.141845] piControl: 9 entries in total
+[   29.142737] piControl: cl-comp:  0 addr  6  bit ff  len   8
+[   29.142804] piControl: cl-comp:  1 addr 11  bit 00  len  16
+[   29.154766] piControl: cannot find thermal zone
+[   29.154839] piControl: piControlInit done
+[   29.623598] i2c_dev: i2c /dev entries driver
+```
+
+After systemd is started, i see the following errors
+```
+# Wont start because of missing network device i guess (TCP)???
+[FAILED] Failed to start ssh.servic…[0m - OpenBSD Secure Shell server.
+
+# After login:
+[   80.305692] piControl: problem at driver initialization
+[   80.305752] piControl: no piControl reset possible, a firmware update is running
+[   80.781912] piControl: problem at driver initialization
+[   80.781958] piControl: no piControl reset possible, a firmware update is running
+[   83.685748] piControl: problem at driver initialization
+...
+
+```
+
+## The challenge
+I have figured out that the piControl device which is created, is missing a backend device.
+The thread piIO Control is never started.
+
+### DTB File missing?
+I do not see any output from the instance when running with DTB file. Not sure why, im guessing something with the UART device defined in there.
+But the DTB file describes the network devices and stuf, and it feels like this is missing. 
+
+### 
