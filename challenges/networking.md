@@ -167,4 +167,12 @@ Something is missing, but nut sure exactly what and therefore not sure how to em
 For now i'm thinking about an custom virtio driver for the revpi, to emulate the character backend for piControl.
 
 
+### GDB Debugging
+1) Check memory address of the piControl module
+```
+cat /sys/module/piControl/sections/.text #returns something like 0xffffffeda1f27000
+gdb-multiarch piControl.ko 
+cd $HOME/revpi-guide/piControl
+add-symbol-file piControl.ko 0xffffffeda1f27000. #This tells GDB where to find the kernel module in the QEMU instance.
 
+```
