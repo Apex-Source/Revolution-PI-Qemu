@@ -176,3 +176,8 @@ cd $HOME/revpi-guide/piControl
 add-symbol-file piControl.ko 0xffffffeda1f27000. #This tells GDB where to find the kernel module in the QEMU instance.
 
 ```
+
+### TODO: Create GDB Guide:
+
+<img width="1451" alt="image" src="https://github.com/user-attachments/assets/4cfc6401-18dd-4c08-a060-c0d20c837a06" />
+
