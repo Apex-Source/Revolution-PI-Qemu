@@ -181,3 +181,8 @@ add-symbol-file piControl.ko 0xffffffeda1f27000. #This tells GDB where to find t
 
 <img width="1451" alt="image" src="https://github.com/user-attachments/assets/4cfc6401-18dd-4c08-a060-c0d20c837a06" />
 
+### Clipboard dumps
+```
+fdtoverlay -o $HOME/merged.dtb -i /boot/dtbs/6.6.0-revpi7-rpi-v8/broadcom/bcm2711-rpi-cm4.dtb /boot/dtbs/6.6.0-revpi7-rpi-v8/overlays/revpi-connect4-virtio.dtbo
+```
+
