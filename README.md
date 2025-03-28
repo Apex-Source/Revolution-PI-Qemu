@@ -4,6 +4,12 @@ This repository is meant for those who want to run the Revolution PI in a Qemu e
 > [!warning]
 > Warning: Following this guide could potentially brick your device. I take no responsibility for any damage. Proceed with caution!
 
+# Read this first
+QEMU does not yet support the CM4 module, which means devices like the thermal sensor, BCM Genet drivers, and others won’t work.
+As a result, this guide is pretty much useless—at least in my opinion—because without those drivers, it’s not really a virtual RevPI.
+For now, it’s just a virtual machine running the RevPI Bookworm image. That said, I will continue to maintain this guide and won’t give up on it. I might even try to create the QEMU drivers myself, though I’m a bit of a n00b in this area.
+Anyway, if you just want to run the RevPI OS for other purposes without networking or virtual I/O, go ahead..
+
 ### Use case
 I wanted to debug some kernel modules I’ve written for the RevPI and run integration tests on virtual RevPI devices to analyze Modbus bandwidth limitations and other behaviors. The goal is to enhance the quality of my software. Since the RevPI is the core of my system, I feel the need to understand every detail inside and out. This setup allows me to experiment with the RevPI kernel without risking damage to the physical device.
 
